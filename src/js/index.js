@@ -22,7 +22,6 @@ input.addEventListener('input', debounce(handleInputInfo, DEBOUNCE_DELAY))
 
 function handleInputInfo(e) {
   const inputContex = e.target.value.toLowerCase();
-  console.log(inputContex);
 
   fetchCountries(inputContex)
     .then(notifyInfoTooManyCountries)
@@ -73,9 +72,11 @@ function notifyInfoTooManyCountries(countries) {
   return countries;
 }
 
-function notifyNoCountry(error) {
-  if ([]) {
+function notifyNoCountry(error, countries) {
+  if ([] || !countries) {
     console.log(error);
-    Notiflix.Notify.Failure('Oops, there is no country with that name')
+    Notiflix.Notify.Failure('Oops, there is no country with that name');
+    countryList.innerHTML = ' ';
+    countryInfo.innerHTML = ' ';
   }
 }
