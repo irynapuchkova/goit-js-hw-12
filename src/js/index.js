@@ -46,7 +46,7 @@ function renderCountryCard(countries) {
     
     const languages = countries[0].languages.map(language => language.name).join(', ')
     refs.countryInfo.innerHTML = markupCard;
-    refs.countryInfo.insertAdjacentHTML('beforeend', `<p><span class="country-info__subtitle">Languages</span>: ${languages} </p>`)
+    refs.countryInfo.insertAdjacentHTML('beforeend', `<p><span class="country-info__subtitle">Languages</span>: ${languages}</p>`)
   }
 }
 
