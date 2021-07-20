@@ -17,11 +17,41 @@ body {
   margin-bottom: 16px;
 }
 
+.country-input:focus,
+.country-input:hover {
+  cursor: pointer;
+  background-color: rgba(206, 238, 25, 0.507);
+  color: blue;
+}
+
 .country-list__item {
   display: flex;
   align-items: center;
 
   padding: 0;
   margin: 0;
+  margin-bottom: 15px;
   list-style: none;
+}
+
+.country-list__name {
+  margin: 0;
+  padding: 0;
+  margin-left: 15px;
+}
+
+.country-info__card {
+  display: flex;
+  align-items: center;
+}
+
+.country-info__name {
+  margin: 0;
+  padding: 0;
+  margin-left: 15px;
+}
+
+.country-info__subtitle {
+  font-size: larger;
+  font-weight: 600;
 }

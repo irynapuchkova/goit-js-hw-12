@@ -1,13 +1,11 @@
 import '../css/styles.css';
-// import '../../node_modules/lodash.debounce/index';
-var debounce = require('lodash.debounce');
-
 import '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css';
+
 import Notiflix from '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0'
-
-
 import countriesListTpl from '../templates/countries_list.hbs';
-import countryCardTpl from '../templates/country_info.hbs';
+import countryCardTpl from '../templates/country_info.hbs'; 
+
+var debounce = require('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
 const BASE_URL = 'https://restcountries.eu/rest/v2';
@@ -57,8 +55,10 @@ function renderCountryCard(countries) {
   if (countries.length === 1) {
     countryList.innerHTML = ' ';
     const markupCard = countryCardTpl(countries)
-
+    
+    const languages = countries[0].languages.map(language => language.name).join(', ')
     countryInfo.innerHTML = markupCard;
+    countryInfo.insertAdjacentHTML('beforeend', `<p><span class="country-info__subtitle">Languages</span>: ${languages} </p>'`)
   }
 }
 
