@@ -1,51 +1,39 @@
-import '../css/styles.css';
-import '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css';
+import '../css/styles.css'
+import '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css'
 
 import Notiflix from '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0'
-import countriesListTpl from '../templates/countries_list.hbs';
-import countryCardTpl from '../templates/country_info.hbs'; 
+import { debounce } from 'lodash'
 
-var debounce = require('lodash.debounce');
+import API from './fetchCountries'
+import getRefs from './get_refs'
+import countriesListTpl from '../templates/countries_list.hbs'
+import countryCardTpl from '../templates/country_info.hbs' 
+
 
 const DEBOUNCE_DELAY = 300;
-const BASE_URL = 'https://restcountries.eu/rest/v2';
-const OPTIONS = `name;capital;flag;population;languages`;
+const refs = getRefs();
 
 
-const input = document.querySelector('#search-box');
-const countryList = document.querySelector('.country-list');
-const countryInfo = document.querySelector('.country-info');
-
-input.addEventListener('input', debounce(handleInputInfo, DEBOUNCE_DELAY))
+refs.input.addEventListener('input', debounce(handleInputInfo, DEBOUNCE_DELAY))
 
 function handleInputInfo(e) {
   const inputContex = e.target.value.toLowerCase();
 
-  fetchCountries(inputContex)
+  API.fetchCountries(inputContex)
     .then(notifyInfoTooManyCountries)
     .then(renderCountryList)
     .then(renderCountryCard)
     .catch(notifyNoCountry)
 }
 
-function fetchCountries(name) {
-
-  return fetch(`${BASE_URL}/name/${name}?fields=${OPTIONS}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status)
-      }
-      return response.json()
-    })
-  }
 
 function renderCountryList(countries) {
 
-  countryInfo.innerHTML = ' ';
+  refs.countryInfo.innerHTML = ' ';
 
   if (countries.length > 1 && countries.length <= 10) {
     const markup = countriesListTpl(countries);
-    countryList.insertAdjacentHTML('beforeend', markup)
+    refs.countryList.insertAdjacentHTML('beforeend', markup)
   }
   return countries;
 }
@@ -53,18 +41,18 @@ function renderCountryList(countries) {
 function renderCountryCard(countries) {
 
   if (countries.length === 1) {
-    countryList.innerHTML = ' ';
+    refs.countryList.innerHTML = ' ';
     const markupCard = countryCardTpl(countries)
     
     const languages = countries[0].languages.map(language => language.name).join(', ')
-    countryInfo.innerHTML = markupCard;
-    countryInfo.insertAdjacentHTML('beforeend', `<p><span class="country-info__subtitle">Languages</span>: ${languages} </p>'`)
+    refs.countryInfo.innerHTML = markupCard;
+    refs.countryInfo.insertAdjacentHTML('beforeend', `<p><span class="country-info__subtitle">Languages</span>: ${languages} </p>`)
   }
 }
 
 function notifyInfoTooManyCountries(countries) {
 
-  countryList.innerHTML = ' ';
+  refs.countryList.innerHTML = ' ';
 
   if (countries.length > 10) {
     Notiflix.Notify.Info('Too many matches found. Please enter a more specific name.')  
@@ -76,7 +64,7 @@ function notifyNoCountry(error, countries) {
   if ([] || !countries) {
     console.log(error);
     Notiflix.Notify.Failure('Oops, there is no country with that name');
-    countryList.innerHTML = ' ';
-    countryInfo.innerHTML = ' ';
+    refs.countryList.innerHTML = ' ';
+    refs.countryInfo.innerHTML = ' ';
   }
 }
