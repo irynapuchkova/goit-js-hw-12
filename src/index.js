@@ -1,13 +1,13 @@
-import '../css/styles.css'
-import '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css'
+import './css/styles.css'
+import '../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css'
 
-import Notiflix from '../../node_modules/notiflix-react/dist/notiflix-react-1.4.0'
+import Notiflix from 'notiflix-react/dist/notiflix-react-1.4.0'
 import { debounce } from 'lodash'
 
-import API from './fetchCountries'
-import getRefs from './get_refs'
-import countriesListTpl from '../templates/countries_list.hbs'
-import countryCardTpl from '../templates/country_info.hbs' 
+import API from './js/fetchCountries'
+import getRefs from './js/get_refs'
+import countriesListTpl from './templates/countries_list.hbs'
+import countryCardTpl from './templates/country_info.hbs' 
 
 
 const DEBOUNCE_DELAY = 300;
