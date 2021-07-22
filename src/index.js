@@ -18,9 +18,7 @@ refs.input.addEventListener('input', debounce(handleInputInfo, DEBOUNCE_DELAY))
 
 function handleInputInfo(e) {
   const inputContex = e.target.value.toLowerCase().trim();
-  console.log(inputContex.trim());
 
-  
   if (inputContex === '') {
     refs.countryInfo.innerHTML = ' ';
     return;
