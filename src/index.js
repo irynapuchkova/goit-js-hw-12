@@ -1,7 +1,7 @@
 import './css/styles.css'
 import '../node_modules/notiflix-react/dist/notiflix-react-1.4.0.css'
 
-import Notiflix from 'notiflix-react/dist/notiflix-react-1.4.0'
+import Notiflix from '../node_modules/notiflix-react/dist/notiflix-react-aio-1.4.0'
 import { debounce } from 'lodash'
 
 import {fetchCountries} from './js/fetchCountries'
@@ -16,16 +16,25 @@ const refs = getRefs();
 
 refs.input.addEventListener('input', debounce(handleInputInfo, DEBOUNCE_DELAY))
 
-function handleInputInfo(e) {
+async function handleInputInfo(e) {
   const inputContex = e.target.value.toLowerCase().trim();
 
   if (inputContex === '') {
     refs.countryInfo.innerHTML = ' ';
     return;
   } else {
-    fetchCountries(inputContex)
-    .then(renderQueryOfCountries)
-    .catch(notifyNoCountry)
+
+    try {
+      const response = await fetchCountries(inputContex);
+      const countriesGot = await renderQueryOfCountries(response);
+      return response;
+      
+    } catch (error) {
+      refs.countryInfo.innerHTML = ' ';
+      refs.countryList.innerHTML = ' ';
+      notifyNoCountry();
+    }
+
   }
 }
 
@@ -50,13 +59,11 @@ function renderQueryOfCountries(countries) {
     refs.countryList.innerHTML = ' ';
     Notiflix.Notify.Info('Too many matches found. Please enter a more specific name.')  
   }
-
 }
 
 function notifyNoCountry(error, countries) {
 
-  if ([] || !countries || inputContex != ''.trim()) {
-    console.log(error);
+  if (!countries || inputContex != ''.trim()) {
     Notiflix.Notify.Failure('Oops, there is no country with that name');
     refs.countryList.innerHTML = ' ';
     refs.countryInfo.innerHTML = ' ';
